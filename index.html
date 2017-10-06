@@ -10,12 +10,15 @@
   <style type="text/css">
 
  #background-image{
-
     opacity:0.3;
   }
 
   #whole-page {
-    background-image: url(assets/images/pizza-pic.jpg)
+    background-image: url(assets/images/pizza-pic.jpg);
+    height:100%;
+    background-position: center;
+    background-repeat:no-repeat;
+    background-size:cover;
   }
 
   .panel-body, .content-row, .panel{
@@ -35,9 +38,20 @@
     background-color: black;
     opacity: 0.5;
   }
-.form-group{
+form{
   margin: 0 auto;
   width:35%;
+  text-align:center;
+  vertical-align: middle;
+}
+
+#logo-image{
+  width:100%;
+}
+
+.container{
+  vertical-align: middle;
+  margin-top: 125px;
 }
 
 
@@ -50,19 +64,16 @@
 <!-- Body Begins Here -->
 <body id="whole-page">
 
-
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-       <a class="navbar-brand">Culinary Checklist</a>
-    </div>
-    <!-- Collect the nav links, forms, and other content for toggling -->
-  </div><!-- /.container-fluid -->
-</nav><!--/end of Nav -->
-
 <div class="container" >
   <form>
+
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <h1 class="display-3"></h1>
+       <img id= "logo-image" src = "assets/images/check-mark.jpg"></img>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+  </div><!-- /.container-fluid -->
+
 
              <!-- Name Form -->
               <div class="form-group">
@@ -83,6 +94,9 @@
                 <label for="zipInput"></label>
                 <input type="text" class="form-control" id="zipInput" placeholder="Zip Code (i.e. 90210)">
               </div>
+
+            <button type="submit" class="btn btn-default">Submit</button>
+
            </form><!-- Forms End Here -->
 
 
