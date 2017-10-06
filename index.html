@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The Culinary Checklist</title>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+
+  <style type="text/css">
+
+ #background-image{
+
+    opacity:0.3;
+  }
+
+  #whole-page {
+    background-image: url(assets/images/pizza-pic.jpg)
+  }
+
+  .panel-body, .content-row, .panel{
+    /*opacity: 0;*/
+    /*z-index: 0;*/
+  }
+  .navbar-header {
+    float: left;
+    padding: 15px;
+    text-align: center;
+    width: 100%;
+}
+  .navbar-brand {
+    float:none;
+  }
+  .overlay {
+    background-color: black;
+    opacity: 0.5;
+  }
+.form-group{
+  margin: 0 auto;
+  width:35%;
+}
+
+
+  </style>
+
+</head>
+
+
+
+<!-- Body Begins Here -->
+<body id="whole-page">
+
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+       <a class="navbar-brand">Culinary Checklist</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+  </div><!-- /.container-fluid -->
+</nav><!--/end of Nav -->
+
+<div class="container" >
+  <form>
+
+             <!-- Name Form -->
+              <div class="form-group">
+                <label for="nameInput"></label>
+                <input type="text" class="form-control" id="nameInput" placeholder="Name (i.e. John Smith)">
+              </div>
+
+
+              <!-- Email Form -->
+              <div class="form-group">
+                <label for="emailInput"></label>
+                <input type="email" class="form-control" id="emailInput" placeholder="Email (i.e. johnsmith@gmail.com)">
+              </div>
+
+
+              <!-- Zip Code Form -->
+              <div class="form-group">
+                <label for="zipInput"></label>
+                <input type="text" class="form-control" id="zipInput" placeholder="Zip Code (i.e. 90210)">
+              </div>
+           </form><!-- Forms End Here -->
+
+
+
+</div>
+
+
+
+
+
+
+
+
+</body>
+
+
+
+
+
+</html>
