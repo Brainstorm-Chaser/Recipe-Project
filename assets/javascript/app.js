@@ -1,6 +1,28 @@
 $(document).ready(function(){
 
-  var selectedRecipes = [];
+  // var selectedRecipes = [];
+
+  var searchResultRecipesMap = {};
+  var selectedRecipesMap = {};
+
+  var groceryList = {};
+
+  function Recipe(id, name, link, image, ingredients){
+    this.id = id,
+    this.name = name,
+    this.link = link,
+    this.image = image,
+    this.ingredients = ingredients
+  }
+
+  function Ingredient(name, quantity, amount, unit, aisle, upcCode){
+    this.name = name,
+    this.quantity = quantity,
+    this.amount = amount,
+    this.unit = unit,
+    this.aisle = aisle,
+    this.upcCode = upcCode
+  }
       
   $("#search").on("click", function(){
     var recipeName = $("#search-input").val().trim();
@@ -23,6 +45,11 @@ $(document).ready(function(){
 
   });
 
+  $("#generateGroceryList").on("click", function(){
+
+
+  });
+
   function displayRecipes(searchResponse){
     var recipes = searchResponse.Recipes;
     $("#recipes-wrapper").empty();
@@ -33,7 +60,7 @@ $(document).ready(function(){
       var link = recipe.link;
       var dataPoints = recipe.dataPoints;
       var id = getRecipeId(link);
-      console.log("id", id);
+      searchResultRecipesMap[id] = new Recipe(id, name, link, image, null);
       
       var recipePanel = $("<div>").addClass("panel panel-default").attr("id" , id);
       var recipeHeader = $("<div>").addClass("panel-heading");
@@ -59,6 +86,8 @@ $(document).ready(function(){
 
       $("#recipes-wrapper").append(recipePanel);
     });
+
+    console.log(searchResultRecipesMap);
   }
 
   function getRecipeId(link){
@@ -77,23 +106,42 @@ $(document).ready(function(){
     return table;
   }
 
-  $("#recipe-search").on("change", "input:checkbox", function(){
+  $("#recipes-wrapper").on("change", "input:checkbox", function(){
     var recipeId = $(this).attr("data-recipe-id");
     var recipePanel = $("#" + recipeId);
 
     if($(this).prop("checked") === true){
-      if(selectedRecipes.indexOf(recipeId) === -1){
-        selectedRecipes.push(recipeId);
+      console.log("keys",Object.keys(selectedRecipesMap));
+      if(Object.keys(selectedRecipesMap).indexOf(recipeId) === -1){
+
+        selectedRecipesMap[recipeId] = searchResultRecipesMap[recipeId];
+        delete searchResultRecipesMap[recipeId];
+
+        recipePanel.attr("id", "selected-"+ recipeId);
         $("#selected-recipes-wrapper").append(recipePanel);
       }
     }
-    else if($(this).prop("checked") === false){
-      var index = selectedRecipes.indexOf(recipeId);
-      selectedRecipes.splice(index, 1);
-      $("#recipes-wrapper").append(recipePanel);
-    }
+    // console.log("selected", selectedRecipesMap);
+    // console.log("search", searchResultRecipesMap);
+  });
 
-    console.log("array", selectedRecipes);
+  $("#selected-recipes-wrapper").on("change", "input:checkbox", function(){
+    var recipeId = $(this).attr("data-recipe-id");
+    var recipePanel = $("#selected-" + recipeId);
+
+    if($(this).prop("checked") === false){
+
+      if(Object.keys(searchResultRecipesMap).indexOf(recipeId) === -1){
+        searchResultRecipesMap[recipeId] = selectedRecipesMap[recipeId];
+        recipePanel.attr("id", recipeId);
+        $("#recipes-wrapper").append(recipePanel);
+      }
+      else{
+        recipePanel.remove();
+      }
+      delete selectedRecipesMap[recipeId];
+      $("input[data-recipe-id="+ recipeId +"]").prop('checked', false);
+    }
   });
 
 });
