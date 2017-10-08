@@ -1,4 +1,6 @@
 $(document).ready(function(){
+
+  var selectedRecipes = [];
       
   $("#search").on("click", function(){
     var recipeName = $("#search-input").val().trim();
@@ -23,6 +25,7 @@ $(document).ready(function(){
 
   function displayRecipes(searchResponse){
     var recipes = searchResponse.Recipes;
+    $("#recipes-wrapper").empty();
 
     recipes.forEach(function(recipe){
       var name = recipe.name;
@@ -32,12 +35,15 @@ $(document).ready(function(){
       var id = getRecipeId(link);
       console.log("id", id);
       
-      var recipeDiv = $("<div>").addClass("panel panel-default");
+      var recipePanel = $("<div>").addClass("panel panel-default").attr("id" , id);
       var recipeHeader = $("<div>").addClass("panel-heading");
       var recipeBody = $("<div>").addClass("panel-body");
 
-      var recipeName = $("<h3>").addClass("panel-title").text(name);
-      recipeHeader.html(recipeName);
+      var recipeName = $("<h3>").addClass("panel-title").text(name).addClass("display-recipe");
+      var checkBoxSpan = $("<span>").addClass("input-group-addon");
+      var inputCheckBox = $("<input>").attr({"type": "checkbox", "data-recipe-id": id});
+      recipeHeader.append(inputCheckBox);
+      recipeHeader.append(recipeName);
 
       var recipeImg = $("<img>").attr("src", image).addClass("recipe-image");
       var recipeImgLink = $("<a>").attr("href", link).attr('target','_blank').append(recipeImg);
@@ -48,10 +54,10 @@ $(document).ready(function(){
       recipeBody.append(recipeImgLink);
       recipeBody.append(recipeInfoTable);
 
-      recipeDiv.append(recipeHeader);      
-      recipeDiv.append(recipeBody);
+      recipePanel.append(recipeHeader);      
+      recipePanel.append(recipeBody);
 
-      $("#recipes-wrapper").append(recipeDiv);
+      $("#recipes-wrapper").append(recipePanel);
     });
   }
 
@@ -70,5 +76,24 @@ $(document).ready(function(){
     });
     return table;
   }
+
+  $("#recipe-search").on("change", "input:checkbox", function(){
+    var recipeId = $(this).attr("data-recipe-id");
+    var recipePanel = $("#" + recipeId);
+
+    if($(this).prop("checked") === true){
+      if(selectedRecipes.indexOf(recipeId) === -1){
+        selectedRecipes.push(recipeId);
+        $("#selected-recipes-wrapper").append(recipePanel);
+      }
+    }
+    else if($(this).prop("checked") === false){
+      var index = selectedRecipes.indexOf(recipeId);
+      selectedRecipes.splice(index, 1);
+      $("#recipes-wrapper").append(recipePanel);
+    }
+
+    console.log("array", selectedRecipes);
+  });
 
 });
