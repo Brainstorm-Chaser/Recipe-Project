@@ -7,17 +7,17 @@ $(document).ready(function(){
 
   var groceryList = {};
 
-  function Recipe(id, name, link, image, ingredients){
+  function Recipe(id, name, link, image, ingredients, servings){
     this.id = id,
     this.name = name,
     this.link = link,
     this.image = image,
-    this.ingredients = ingredients
+    this.ingredients = ingredients,
+    this.servings = servings
   }
 
-  function Ingredient(name, quantity, amount, unit, aisle, upcCode){
+  function Ingredient(name, amount, unit, aisle, upcCode){
     this.name = name,
-    this.quantity = quantity,
     this.amount = amount,
     this.unit = unit,
     this.aisle = aisle,
@@ -46,13 +46,107 @@ $(document).ready(function(){
   });
 
   $("#generateGroceryList").on("click", function(){
+    var recipeIds = "";
+    Object.keys(selectedRecipesMap).forEach(function(id){
+      recipeIds += id + ",";
+    });
 
+    recipeIds = recipeIds.slice(0, recipeIds.length-1);
+    // console.log("recipeIds", recipeIds);
 
+    // $.ajax({
+    //   type: "GET",
+    //   url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk",
+    //   dataType: "json",
+    //   data: jQuery.param({ids: recipeIds, includeNutrition: false}),
+    //   headers: {
+    //     'X-Mashape-Key': 'LvriMxRsKAmshM4K2IHnxi8ZrwOUp1mrqSCjsnsOdiLEfjwK75'
+    //   }
+    // }).done(function(response) {
+    //   console.log("response String", JSON.stringify(response));
+    //   console.log("response", response);
+    // });
+
+    var response = JSON.parse(recipesFullInfo);
+    console.log("response", response);
+    getIngredients(response);
   });
+
+
+  function getIngredients(response){
+    response.forEach(function(recipe){
+
+      var recipeObj = recipe;
+      
+      var recipeId = recipeObj.id;
+      var servings = recipeObj.servings;
+
+      var ingredientsArray = [];
+      recipeObj.extendedIngredients.forEach(function(ingredient){  
+        ingredientsArray.push(new Ingredient(ingredient.name, ingredient.amount, ingredient.unitLong, ingredient.aisle, null));
+      });
+
+
+      // always select first two recipes for testing / it will throw error since it is taking from the response file.
+      var selectedRecipeObj = selectedRecipesMap[recipeId];
+      console.log("selectedRecipeObj", selectedRecipeObj);
+      selectedRecipeObj['ingredients'] = ingredientsArray;
+      selectedRecipeObj['servings'] = servings;
+
+      // getUPCCodeFromIngredients(selectedRecipeObj);
+
+    });
+    
+  }
+
+  function getUPCCodeFromIngredients(recipe){
+    var servingSize = recipe.servings;
+    var ingredientsNames = [];
+    recipe.ingredients.forEach(function(ingredient){
+      ingredientsNames.push(ingredient.name);
+    });
+
+    var dataPayload = {
+      "ingredients": ingredientsNames,
+      "servings": servingSize
+    };
+
+    // console.log(ingredientsNames, servingSize);
+
+    // $.ajax({
+    //   type: "POST",
+    //   url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/ingredients/map",
+    //   dataType: "json",
+    //   data: JSON.stringify(dataPayload),
+    //   headers: {
+    //     'X-Mashape-Key': 'LvriMxRsKAmshM4K2IHnxi8ZrwOUp1mrqSCjsnsOdiLEfjwK75'
+    //   }
+    // }).done(function(response) {
+    //   console.log("response String", JSON.stringify(response));
+    //   console.log("response", response);
+    // });
+
+    var response1 = JSON.parse(recipe_1_UPCs);
+    var response2 = JSON.parse(recipe_2_UPCs);
+    console.log("response1", response1);
+    console.log("response2", response2);
+
+    response1.forEach(function(ingredient){
+      console.log(ingredient);
+      ingredient.products.forEach(function(product){
+        // console.log(product);
+        var title = product.title;
+        var upc = product.upc;
+        console.log(title, upc);
+      });
+    });
+
+  }
 
   function displayRecipes(searchResponse){
     var recipes = searchResponse.Recipes;
     $("#recipes-wrapper").empty();
+    searchResultRecipesMap = {};
 
     recipes.forEach(function(recipe){
       var name = recipe.name;
@@ -60,7 +154,7 @@ $(document).ready(function(){
       var link = recipe.link;
       var dataPoints = recipe.dataPoints;
       var id = getRecipeId(link);
-      searchResultRecipesMap[id] = new Recipe(id, name, link, image, null);
+      searchResultRecipesMap[id] = new Recipe(id, name, link, image, null, null);
       
       var recipePanel = $("<div>").addClass("panel panel-default").attr("id" , id);
       var recipeHeader = $("<div>").addClass("panel-heading");
@@ -87,7 +181,7 @@ $(document).ready(function(){
       $("#recipes-wrapper").append(recipePanel);
     });
 
-    console.log(searchResultRecipesMap);
+    console.log("searchResultRecipesMap", searchResultRecipesMap);
   }
 
   function getRecipeId(link){
@@ -111,7 +205,6 @@ $(document).ready(function(){
     var recipePanel = $("#" + recipeId);
 
     if($(this).prop("checked") === true){
-      console.log("keys",Object.keys(selectedRecipesMap));
       if(Object.keys(selectedRecipesMap).indexOf(recipeId) === -1){
 
         selectedRecipesMap[recipeId] = searchResultRecipesMap[recipeId];
@@ -121,8 +214,6 @@ $(document).ready(function(){
         $("#selected-recipes-wrapper").append(recipePanel);
       }
     }
-    // console.log("selected", selectedRecipesMap);
-    // console.log("search", searchResultRecipesMap);
   });
 
   $("#selected-recipes-wrapper").on("change", "input:checkbox", function(){
