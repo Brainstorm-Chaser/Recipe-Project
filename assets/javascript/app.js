@@ -159,6 +159,7 @@ $(document).ready(function(){
     });
 
     $("#grocery-list-wrapper").html(table);
+    $("#grocery-list-window").show();
   }
 
   function getUPCCodeFromIngredients(recipe){
