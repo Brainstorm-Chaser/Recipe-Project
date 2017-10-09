@@ -1,10 +1,11 @@
 .main-wrapper{
-  width: 85vw;
+  width: 80vw;
 }
 
 .display-recipe{
   display: inline-block;
   margin-left: 15px;
+  vertical-align: middle;
 }
 
 .recipe-image{
@@ -26,4 +27,16 @@ table {
 table, th, td {
     border: 1px solid lightgrey;
     padding: 10px;
+}
+
+#recipe-window, #grocery-list-window, #map-window{
+  display: none;
+}
+
+#login-window{
+  vertical-align: middle;
+}
+
+#recipe-window{
+  margin-top: 10vh;
 }

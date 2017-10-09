@@ -53,23 +53,23 @@ $(document).ready(function(){
   }
       
   $("#search").on("click", function(){
-    var recipeName = $("#search-input").val().trim();
+  //   var recipeName = $("#search-input").val().trim();
 
-    $.ajax({
-      type: "GET",
-      url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/site/search",
-      dataType: "json",
-      data: jQuery.param({query: recipeName}),
-      headers: {
-        'X-Mashape-Key': 'LvriMxRsKAmshM4K2IHnxi8ZrwOUp1mrqSCjsnsOdiLEfjwK75'
-      }
-    }).done(function(response) {
-      // console.log("response", JSON.stringify(response));
-      console.log("response", response);
-      displayRecipes(response);
-    });
+  //   $.ajax({
+  //     type: "GET",
+  //     url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/site/search",
+  //     dataType: "json",
+  //     data: jQuery.param({query: recipeName}),
+  //     headers: {
+  //       'X-Mashape-Key': 'LvriMxRsKAmshM4K2IHnxi8ZrwOUp1mrqSCjsnsOdiLEfjwK75'
+  //     }
+  //   }).done(function(response) {
+  //     // console.log("response", JSON.stringify(response));
+  //     console.log("response", response);
+  //     displayRecipes(response);
+  //   });
 
-    // displayRecipes(searchResponse);
+    displayRecipes(searchResponse);
 
   });
 
@@ -236,8 +236,6 @@ $(document).ready(function(){
       var recipeInfoTable = getRecipeInfoTable(dataPoints);
       var tableWrapper = $("<div>").append(recipeInfoTable).addClass("display-recipe");
 
-      // recipeBody.append(recipeImgLink);
-      // recipeBody.append(recipeInfoTable);
       recipeBody.append(recipeLinkWrapper);
       recipeBody.append(tableWrapper);
 
@@ -309,11 +307,14 @@ $(document).ready(function(){
     email = $("#emailInput").val();
     zipcode = $("#zipInput").val();
 
-    usersRef.child(userName).once('value', function(snapShot){
+    // usersRef.child(userName).once('value', function(snapShot){
 
-      console.log("-------on value called--------");
-      console.log("snapShot", snapShot.val());
-    });
+    //   console.log("-------on value called--------");
+    //   console.log("snapShot", snapShot.val());
+    // });
+
+    $("#login-window").hide();
+    $("#recipe-window").show();
 
   });
 
@@ -339,7 +340,6 @@ $(document).ready(function(){
     }
 
     usersRef.child(userName).child(collectionName).update(userRecord);
-
 
   });
 

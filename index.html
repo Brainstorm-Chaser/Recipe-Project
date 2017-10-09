@@ -10,11 +10,8 @@
   <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
 
   <style type="text/css">
-   #background-image{
-     background:transparent;
-   }
 
-   #whole-page {
+   body {
     background-image: url(assets/images/cutting-board-hands.jpg);
     height:100%;
     background-position: center;
@@ -23,70 +20,91 @@
     /*background: rgba(255,255,255,1);*/
   }
 
-  .panel-body, .content-row, .panel{
-    /*opacity:1.0;*/
-  }
-  .navbar-header {
-    float: left;
-    padding: 15px;
-    text-align: center;
-    width: 100%;
-  }
-  .navbar-brand {
-    float:none;
-  }
-  .overlay {
-    background-color: black;
-    opacity: 1.0
-  }
-  form{
+  #login-window{
     margin: 0 auto;
-    width:35%;
+    width:35vw;
     text-align:center;
-    vertical-align: middle;
-    opacity:1.0;
   }
 
   #logo-image{
     width:100%;
   }
 
-  .container{
-    vertical-align: middle;
-    margin-top: 125px;
-  }
 </style>
 </head>
 
 <!-- Body Begins Here -->
-<body id="whole-page">
-  <div class="container" >
-    <form>
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <h1 class="display-3"></h1>
-        <img id= "logo-image" src = "assets/images/culinary-checklist-logo.jpg"></img>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-      </div><!-- /.container-fluid -->
-      <!-- Name Form -->
-      <div class="form-group">
-        <label for="nameInput"></label>
-        <input type="text" class="form-control" id="nameInput" placeholder="Name (i.e. John Smith)">
+<body >
+  <div class="container main-wrapper">
 
-        <!-- Email Form -->
+    <div id="login-window">
+        <div>
+          <h1 class="display-3"></h1>
+          <img id= "logo-image" src = "assets/images/culinary-checklist-logo.jpg"></img>
+        </div>
 
-        <label for="emailInput"></label>
-        <input type="email" class="form-control" id="emailInput" placeholder="Email (i.e. johnsmith@gmail.com)">
+        <div class="form-group">
+          <label for="nameInput"></label>
+          <input type="text" class="form-control" id="nameInput" placeholder="Name (i.e. John Smith)">
 
-        <!-- Zip Code Form -->
+          <label for="emailInput"></label>
+          <input type="email" class="form-control" id="emailInput" placeholder="Email (i.e. johnsmith@gmail.com)">
 
-        <label for="zipInput"></label>
-        <input type="text" class="form-control" id="zipInput" placeholder="Zip Code (i.e. 90210)">
+          <label for="zipInput"></label>
+          <input type="text" class="form-control" id="zipInput" placeholder="Zip Code (i.e. 90210)">
+        </div>
+
+        <button type="submit" class="btn btn-default" id="login">Login</button>
+    </div>
+
+
+
+
+
+    <div id="recipe-window">
+      <div class="row">
+        <div class="row" id="recipe-search">
+          <div class="col-sm-6">
+            
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <!-- <h3 class="panel-title" style="display: inline-block">Search</h3> -->
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search for Recipes">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="search">Go!</button>
+                  </span>
+                </div>
+              </div>
+              <div class="panel-body" id="recipes-wrapper"></div>
+            </div>
+            <!-- <div id="recipes-wrapper"></div> -->
+          </div>
+
+          <div class="col-sm-6">
+            
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Selected Recipes</h3>
+              </div>
+              <div class="panel-body" id="selected-recipes-wrapper"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="generateGroceryList">Generate Grocery List</button>
+          <!-- <div id="selected-recipes-wrapper"></div> -->
+          </div> 
+        </div>
       </div>
+    </div>
 
-      <button type="submit" class="btn btn-default" id="login">Login</button>
 
-    </form><!-- Forms End Here -->
+    <div id="grocery-list-window">
+    </div>
+
+
+    <div id="map-window">
+    </div>
 
   </div>
 
