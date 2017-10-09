@@ -305,9 +305,9 @@ $(document).ready(function(){
   });
 
   $("#login").on("click", function(){
-    userName = $("#user-name").val();
-    email = $("#email").val();
-    zipcode = $("#zip-code").val();
+    userName = $("#nameInput").val();
+    email = $("#emailInput").val();
+    zipcode = $("#zipInput").val();
 
     usersRef.child(userName).once('value', function(snapShot){
 
