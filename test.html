@@ -4,7 +4,13 @@
   <title>Test Html</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <!-- <link rel="stylesheet" type="text/css" href="assets/css/style.css"> -->
+  <style>
+      #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
 </head>
 <body>
 
@@ -36,7 +42,11 @@
 
 </div>
 
+<div id="map"></div>
+
 <script type="text/javascript" src="assets/javascript/app.js"></script>
 <script type="text/javascript" src="assets/javascript/response.js"></script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmDYecXmk6UpvFwFF7UvUIIeUoch3PCoQ&callback=initMap"></script>
 </body>
 </html>
