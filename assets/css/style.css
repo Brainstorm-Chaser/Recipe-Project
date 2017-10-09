@@ -1,3 +1,7 @@
+.main-wrapper{
+  width: 85vw;
+}
+
 .display-recipe{
   display: inline-block;
   margin-left: 15px;
@@ -10,4 +14,16 @@
 
 input[type='checkbox']{
 
+}
+
+table {
+    border-collapse: collapse;
+    /*width: 100%;*/
+    text-align: left;
+    display: inline-table;
+}
+
+table, th, td {
+    border: 1px solid lightgrey;
+    padding: 10px;
 }
