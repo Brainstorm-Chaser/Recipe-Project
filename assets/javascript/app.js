@@ -125,8 +125,16 @@ $(document).ready(function(){
     var groceryList = generateGroceryList(selectedRecipesMap);
     // displayGroceryList(selectedRecipesMap);
     displayGroceryList(groceryList);
+    displayMap();
 
     // testGroceryList();
+  }
+
+  function displayMap(){
+    var maplink = "https://www.google.com/maps/embed/v1/search?key=AIzaSyBmDYecXmk6UpvFwFF7UvUIIeUoch3PCoQ&q=grocery+" + zipcode ;
+    $("#map-zip").attr("src", maplink);
+
+    $("#map-window").show();
   }
 
   function generateGroceryList(selectedRecipesMap){
@@ -243,8 +251,7 @@ $(document).ready(function(){
 
     $("#recipe-window").hide();
 
-    $("#grocery-list-window").show();
-    $("#map-window").show();
+    $("#grocery-list-window").show();    
   }
 
   function displayRecipes(searchResponse){
