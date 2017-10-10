@@ -1,3 +1,11 @@
+/*#page-header{
+    background-image : url(../images/cooked-meal-1.jpg);
+    height:250px;
+    background-position: center;
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+*/
 .main-wrapper{
   width: 85vw;
 }
@@ -34,6 +42,17 @@ input[type='checkbox']{
     padding: 10px;
 }*/
 
+  #login {
+    background-color: darkgreen ;   /* Green #4CAF50; #799855*/
+    border: none;
+    color: white;
+    padding: 1vh 2vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.2em;
+}
+
 .recipe-info table, td, th{
   border: none;
   padding: 5px 15px;
@@ -59,10 +78,6 @@ input[type='checkbox']{
   display: none;
 }
 
-#login-window{
-  vertical-align: middle;
-}
-
 #recipe-window, #grocery-list-window{
   margin-top: 10vh;
 }
@@ -76,3 +91,97 @@ input[type='checkbox']{
 #grocery-list-header{
   text-align: center;
 }
+
+.form-section{
+  text-align: center;
+}
+
+
+/*.header-text-box{
+  color:white;
+  font-weight: bold;
+  text-align: center;
+  height:100%;
+  margin-top:60px;
+  font-family: 'Tangerine';font-size: 96px;
+
+}*/
+
+
+
+  #logo-image{
+    width:100%;
+  }
+
+
+
+  /*-----------------------------max*/
+
+
+  .form-group{
+  margin-top: 20px;
+  line-height: 0;
+}
+
+.center-pills {
+   display: inline-block;
+   margin-top:25px;
+   background-color:white;
+   font-size: 20px;
+   padding:5px;
+   margin-left:10px;
+   margin-right:10px;
+   border-radius:10px;
+   border:2px solid green;
+}
+
+.header-text-box{
+  color:white;
+  font-weight: bold;
+  text-align: center;
+  /*height:100%;*/
+  margin-top:60px;
+  font-family: 'Sofia', cursive;
+  font-size: 10vmin;
+  text-shadow: 2px 2px 16px #000000;
+  }
+
+.grocery-list-panel {
+  margin-top:50px;
+  text-align: center;
+}
+
+.recipe-section{
+  height:100%;
+}
+
+#nameInput, #emailInput, #zipInput{
+  border: 1px solid lightblue;
+}
+
+
+/*#recipe-window, #grocery-list-window, #map-window{
+  display: none;
+  }*/
+
+
+#login-window{
+  vertical-align: middle;
+  margin: 0 auto;
+  width:35vw;
+  text-align:center;
+  }
+
+#recipe-window{
+  margin-top: 10vh;
+  }
+
+/*#login-window, #grocery-window{
+    margin: 0 auto;
+    width:35vw;
+    text-align:center;
+  }*/
+
+#logo-image{
+    width:100%;
+  }
