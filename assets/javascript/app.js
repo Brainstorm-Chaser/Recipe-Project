@@ -21,55 +21,57 @@ $(document).ready(function(){
   var userName = null;
   var email = null;
   var zipcode = null;
-  // var groceryList = {};
 
-  // var groceryItem = {
-  //   id: null,
-  //   name : null,
-  //   amount: null,
-  //   unit: null,
-  // }
+  var groceryListTable = null;
 
-  // var groceryList = {
-  //   id: null,
-  //   item: groceryItem,
-  // };
-
-  function Recipe(id, name, link, image, ingredients, servings){
+  function Recipe(id, name, link, image, ingredients, servings, kvtable){
     this.id = id,
     this.name = name,
     this.link = link,
     this.image = image,
     this.ingredients = ingredients,
-    this.servings = servings
+    this.servings = servings,
+    this.kvtable = kvtable
   }
 
-  function Ingredient(name, amount, unit, aisle, upcCode){
+  function Ingredient(name, amount, unit, aisle, possibleUnits){
     this.name = name,
     this.amount = amount,
     this.unit = unit,
     this.aisle = aisle,
-    this.upcCode = upcCode
+    this.possibleUnits = possibleUnits
+  }
+
+  function GroceryItem(name, quantities, aisle){
+    this.name = name,
+    this.quantities = quantities,
+    this.aisle = aisle
+  }
+
+  function Quantity(amount, unit, possibleUnits){
+    this.amount = amount,
+    this.unit = unit,
+    this.possibleUnits = possibleUnits
   }
       
   $("#search").on("click", function(){
-  //   var recipeName = $("#search-input").val().trim();
+    var recipeName = $("#search-input").val().trim();
 
-  //   $.ajax({
-  //     type: "GET",
-  //     url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/site/search",
-  //     dataType: "json",
-  //     data: jQuery.param({query: recipeName}),
-  //     headers: {
-  //       'X-Mashape-Key': 'LvriMxRsKAmshM4K2IHnxi8ZrwOUp1mrqSCjsnsOdiLEfjwK75'
-  //     }
-  //   }).done(function(response) {
-  //     // console.log("response", JSON.stringify(response));
-  //     console.log("response", response);
-  //     displayRecipes(response);
-  //   });
+    if(recipeName !== ""){
+      $.ajax({
+        type: "GET",
+        url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/site/search",
+        dataType: "json",
+        data: jQuery.param({query: recipeName}),
+        headers: {
+          'X-Mashape-Key': 'LvriMxRsKAmshM4K2IHnxi8ZrwOUp1mrqSCjsnsOdiLEfjwK75'
+        }
+      }).done(function(response) {
+        displayRecipes(response);
+      });
+    }
 
-    displayRecipes(searchResponse);
+    // displayRecipes(searchResponse);
 
   });
 
@@ -80,7 +82,6 @@ $(document).ready(function(){
     });
 
     recipeIds = recipeIds.slice(0, recipeIds.length-1);
-    // console.log("recipeIds", recipeIds);
 
     $.ajax({
       type: "GET",
@@ -91,13 +92,10 @@ $(document).ready(function(){
         'X-Mashape-Key': 'LvriMxRsKAmshM4K2IHnxi8ZrwOUp1mrqSCjsnsOdiLEfjwK75'
       }
     }).done(function(response) {
-      console.log("response String", JSON.stringify(response));
-      console.log("response", response);
       getIngredients(response);
     });
 
     // var response = JSON.parse(recipesFullInfo);
-    // console.log("response", response);
     // getIngredients(response);
   });
 
@@ -113,25 +111,91 @@ $(document).ready(function(){
       var ingredientsArray = [];
 
       recipeObj.extendedIngredients.forEach(function(ingredient){
-        ingredientsArray.push(new Ingredient(ingredient.name, ingredient.amount, ingredient.unitLong, ingredient.aisle, null));
+        // generateGroceryList(ingredient);
+        var possibleUnits = [ingredient.unit, ingredient.unitLong, ingredient.unitShort];
+        ingredientsArray.push(new Ingredient(ingredient.name, ingredient.amount, ingredient.unitLong, 
+          ingredient.aisle, possibleUnits));
       });
 
-      // always select first two recipes for testing / it will throw error since it is taking from the response file.
       var selectedRecipeObj = selectedRecipesMap[recipeId];
       selectedRecipeObj['ingredients'] = ingredientsArray;
       selectedRecipeObj['servings'] = servings;
-      // getUPCCodeFromIngredients(selectedRecipeObj);
     });
-    console.log("selectedRecipesMap", selectedRecipesMap);
-    displayGroceryList(selectedRecipesMap);
+
+    var groceryList = generateGroceryList(selectedRecipesMap);
+    // displayGroceryList(selectedRecipesMap);
+    displayGroceryList(groceryList);
+
+    // testGroceryList();
   }
 
+  function generateGroceryList(selectedRecipesMap){
 
-  function displayGroceryList(selectedRecipesMap){
+    var groceryList = {};
+    
+    Object.values(selectedRecipesMap).forEach(function(recipe){
+      recipe.ingredients.forEach(function(ingredient){
+        var ingredientName = ingredient.name;
+        if(Object.keys(groceryList).indexOf(ingredientName) === -1){
+          var quantities = [new Quantity(ingredient.amount, ingredient.unit, Array.from(ingredient.possibleUnits))];
+          groceryList[ingredientName] = new GroceryItem(ingredientName, quantities, ingredient.aisle);
+        }
+        else{
+          var groceryItem = groceryList[ingredientName];
+          console.log("item exists: ", groceryItem);
+
+          // var conUnits = [];
+
+          for(var index=0; index<groceryItem.quantities.length; index++){
+            var quantity = groceryItem.quantities[index];
+            
+            var common = $.grep(quantity.possibleUnits, function(element) {
+              return $.inArray(element, ingredient.possibleUnits ) !== -1;
+            });
+
+            var unitMatched = false;
+            if(common.length !== 0){
+              console.log("common", common);
+              var totalAmount = eval(quantity.amount) + eval(ingredient.amount);
+              groceryItem.quantities[index].amount = totalAmount;
+              // console.log("unit matched", groceryItem, quantity);
+              unitMatched = true;
+              break;
+            }
+            // else{
+            //   try{
+            //     console.log(ingredient.unit, ingredient.amount, quantity.unit);
+            //     console.log("********",math.to(math.unit(eval(ingredient.amount), ingredient.unit), quantity.unit));
+            //   }catch(err){
+            //     console.log("can't convert");
+            //   }
+            // }
+          }
+          if(!unitMatched){
+            // there is item, but unit does not match with existing item
+            groceryItem.quantities.push(new Quantity(ingredient.amount, ingredient.unit, 
+              Array.from(ingredient.possibleUnits)));
+            console.log("-------------------",ingredient, groceryItem); 
+          }
+        }
+      });
+    });
+    return groceryList;
+  }
+
+  function displayGroceryList(groceryList){
 
     $("#grocery-list-wrapper").empty();
     
-    var table = $("<table>");
+    var groceryItems = Object.values(groceryList);
+    groceryItems.sort(function(a, b){
+      var nameA = a.aisle;
+      var nameB = b.aisle;
+      return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
+    });
+    console.log(groceryItems);
+
+    var table = $("<table>").addClass("grocery-list");
     var tHead = $("<thead>");
     var tBody = $("<tbody>");
     table.append(tHead);
@@ -145,66 +209,42 @@ $(document).ready(function(){
     // rowHeader.append($("<th>").text('Price'));
     tHead.append(rowHeader);
 
-    Object.values(selectedRecipesMap).forEach(function(recipe){
-      recipe.ingredients.forEach(function(ingredient){
-        //name, amount, unit, aisle, upcCode
+    groceryItems.forEach(function(ingredient){
+      var quantities = ingredient.quantities;
+      quantities.forEach(function(quantity){
+        var amount = eval(quantity.amount);
+        if(amount % 1 != 0){
+          amount = amount.toFixed(4);
+          if(eval(amount) === 0){
+            amount = .1000;
+          }
+        }
+
         var row = $("<tr>");
         row.append($("<td>").text(ingredient.name));
-        row.append($("<td>").text(ingredient.amount));
-        row.append($("<td>").text(ingredient.unit));
+        row.append($("<td>").text(amount));
+        row.append($("<td>").text(quantity.unit));
         row.append($("<td>").text(ingredient.aisle));
-        // row.append($("<td>").text("--"));
         tBody.append(row);
       });
     });
 
+    groceryListTable = table;
+
     $("#grocery-list-wrapper").html(table);
+
+    $("#grocery-selected-recipes").append($("#selected-recipes-wrapper").html());
+    $("input:checkbox").hide();
+
+    Object.values(selectedRecipesMap).forEach(function(recipe){
+      var span = $("<span>").text("Servings: " + recipe.servings).addClass("servings");
+      $("#selected-" + recipe.id + "> .panel-heading").append(span);
+    });
+
+    $("#recipe-window").hide();
+
     $("#grocery-list-window").show();
-  }
-
-  function getUPCCodeFromIngredients(recipe){
-    var servingSize = recipe.servings;
-    var ingredientsNames = [];
-    recipe.ingredients.forEach(function(ingredient){
-      ingredientsNames.push(ingredient.name);
-    });
-
-    var dataPayload = {
-      "ingredients": ingredientsNames,
-      "servings": servingSize
-    };
-
-    // console.log(ingredientsNames, servingSize);
-
-    // $.ajax({
-    //   type: "POST",
-    //   url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/ingredients/map",
-    //   dataType: "json",
-    //   data: JSON.stringify(dataPayload),
-    //   headers: {
-    //     'X-Mashape-Key': 'LvriMxRsKAmshM4K2IHnxi8ZrwOUp1mrqSCjsnsOdiLEfjwK75'
-    //   }
-    // }).done(function(response) {
-    //   console.log("response String", JSON.stringify(response));
-    //   console.log("response", response);
-    // });
-
-    var response1 = JSON.parse(recipe_1_UPCs);
-    var response2 = JSON.parse(recipe_2_UPCs);
-    console.log("response1", response1);
-    console.log("response2", response2);
-
-    response1.forEach(function(ingredient){
-      console.log(ingredient);
-      ingredient.products.forEach(function(product){
-        // console.log(product);
-        var id = product.id;
-        var title = product.title;
-        var upc = product.upc;
-        console.log(title, upc, id);
-      });
-    });
-
+    $("#map-window").show();
   }
 
   function displayRecipes(searchResponse){
@@ -213,41 +253,52 @@ $(document).ready(function(){
     searchResultRecipesMap = {};
 
     recipes.forEach(function(recipe){
-      var name = recipe.name;
-      var image = recipe.image;
-      var link = recipe.link;
-      var dataPoints = recipe.dataPoints;
-      var id = getRecipeId(link);
-      searchResultRecipesMap[id] = new Recipe(id, name, link, image, null, null);
-      
-      var recipePanel = $("<div>").addClass("panel panel-default").attr("id" , id);
-      var recipeHeader = $("<div>").addClass("panel-heading");
-      var recipeBody = $("<div>").addClass("panel-body");
-
-      var recipeName = $("<h3>").addClass("panel-title").text(name).addClass("display-recipe");
-      var checkBoxSpan = $("<span>").addClass("input-group-addon");
-      var inputCheckBox = $("<input>").attr({"type": "checkbox", "data-recipe-id": id});
-      recipeHeader.append(inputCheckBox);
-      recipeHeader.append(recipeName);
-
-      var recipeImg = $("<img>").attr("src", image).addClass("recipe-image");
-      var recipeImgLink = $("<a>").attr("href", link).attr('target','_blank').append(recipeImg);
-      var recipeLinkWrapper = $("<div>").append(recipeImgLink).addClass("display-recipe");
-      
-      var recipeInfoTable = getRecipeInfoTable(dataPoints);
-      var tableWrapper = $("<div>").append(recipeInfoTable).addClass("display-recipe");
-
-      recipeBody.append(recipeLinkWrapper);
-      recipeBody.append(tableWrapper);
-
-      recipePanel.append(recipeHeader);      
-      recipePanel.append(recipeBody);
-
+      var recipePanel = createRecipePanel(recipe, true);
       $("#recipes-wrapper").append(recipePanel);
     });
 
     console.log("searchResultRecipesMap", searchResultRecipesMap);
   }
+
+  function createRecipePanel(recipe, showCheckBox){
+    var name = recipe.name;
+    var image = recipe.image;
+    var link = recipe.link;
+    var dataPoints = recipe.dataPoints;
+    var info = recipe.kvtable;
+    var id = getRecipeId(link);
+    searchResultRecipesMap[id] = new Recipe(id, name, link, image, null, null, info);
+    
+    var recipePanel = $("<div>").addClass("panel panel-recipe").attr("id" , id);
+    var recipeHeader = $("<div>").addClass("panel-heading");
+    var recipeBody = $("<div>").addClass("panel-body");
+
+    var recipeName = $("<h3>").addClass("panel-title").text(name).addClass("display-recipe");
+    if(showCheckBox){
+      var checkBoxSpan = $("<span>").addClass("input-group-addon");
+      var inputCheckBox = $("<input>").attr({"type": "checkbox", "data-recipe-id": id});
+      recipeHeader.append(inputCheckBox);
+    }
+    recipeHeader.append(recipeName);
+
+    var recipeImg = $("<img>").attr("src", image).addClass("recipe-image");
+    var recipeImgLink = $("<a>").attr("href", link).attr('target','_blank').append(recipeImg);
+    var recipeLinkWrapper = $("<div>").append(recipeImgLink).addClass("display-recipe");
+    
+    var recipeInfoTable = info;  //getRecipeInfoTable(dataPoints);
+    // var tableWrapper = $("<div>").append(recipeInfoTable).addClass("display-recipe");
+    console.log("info", info);
+    var tableWrapper = $("<div>").addClass("display-recipe").html(info);  
+
+    recipeBody.append(recipeLinkWrapper);
+    recipeBody.append(tableWrapper);
+
+    recipePanel.append(recipeHeader);      
+    recipePanel.append(recipeBody);
+
+    return recipePanel;
+  }
+
 
   function getRecipeId(link){
     var idStartIndex = link.lastIndexOf("-") + 1;
@@ -255,7 +306,7 @@ $(document).ready(function(){
   }
 
   function getRecipeInfoTable(dataPoints){
-    var table = $("<table>");
+    var table = $("<table>").addClass("recipe-info");
     var tbody = $("<tbody>");
     table.append(tbody);
 
@@ -308,36 +359,73 @@ $(document).ready(function(){
     email = $("#emailInput").val();
     zipcode = $("#zipInput").val();
 
-    // usersRef.child(userName).once('value', function(snapShot){
+    usersRef.child(userName).once('value', function(snapshot){
+      console.log("-------on value called--------");
+      console.log("snapShot", snapshot.val());
 
-    //   console.log("-------on value called--------");
-    //   console.log("snapShot", snapShot.val());
-    // });
+      // var query = firebase.database().ref("users").orderByKey();
+      // query.once("value").then(function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {
+        var recipeCollectionName = childSnapshot.key;
+        console.log("recipe name",recipeCollectionName);
+        
+        var recipeCollectionObj = childSnapshot.val();
+        var recipeZipcode = recipeCollectionObj.zipcode;
+        var recipeEmail = recipeCollectionObj.email;
+        var recipesSaved = JSON.parse(recipeCollectionObj.recipes);
+        var recipeGroceryTable = recipeCollectionObj.groceryTable;
+
+        console.log(recipeZipcode, recipeEmail, recipesSaved, recipeGroceryTable);
+
+        var panelId = recipeCollectionName + "_data";
+        var collectionPanel = $("<div>").addClass("panel panel-default panel-recipe");
+        var collectionHeader = $("<div>").addClass("panel-heading");
+        var collectionBody = $("<div>").addClass("panel-body");
+
+        var row = $("<div>").addClass("row  collapse in").attr("id", panelId);
+        var col_1 = $("<div>").addClass("col-md-6");
+        var col_2 = $("<div>").addClass("col-md-6");
+        row.append(col_1, col_2);
+        collectionBody.append(row);
+
+        var collectionName = $("<h3>").addClass("panel-title").text("Name: " + recipeCollectionName).addClass("display-recipe");
+        var a = $("<a>").addClass("form-control").append(collectionName).attr({"data-toggle": "collapse", "data-target": "#"+panelId});
+        collectionHeader.append(a);
+
+        console.log("values", Object.values(recipesSaved));
+        Object.values(recipesSaved).forEach(function(recipe){
+          console.log(".......", recipe);
+          var recipePanel = createRecipePanel(recipe, false);
+          col_1.append(recipePanel);
+        });
+
+        col_2.html(recipeGroceryTable);
+
+        collectionPanel.append(collectionHeader, collectionBody);
+
+        $("#recipe-collection").append(collectionPanel);
+
+      });
+    });
 
     $("#login-window").hide();
     $("#recipe-window").show();
+    $("#recipe-collection-window").show();
 
   });
 
   $("#save").on("click", function(){
 
-     // root{
-  //   users {
-  //     username {
-  //       login: false,
-  //       email: minu@example.com,
-  //       zipcode: 94070,
-  //       recipes: JSON.stringify(searchResultRecipesMap)
-  //     }
-  //   }
-  // } 
   var collectionName = $("#recipe-collection-name").val();
   console.log(userName, email, zipcode, collectionName);
+
+  console.log("groceryListTable",groceryListTable[0].outerHTML);
 
     var userRecord = {
       zipcode: zipcode,
       email: email,
-      recipes: JSON.stringify(selectedRecipesMap)
+      recipes: JSON.stringify(selectedRecipesMap),
+      groceryTable: groceryListTable[0].outerHTML 
     }
 
     usersRef.child(userName).child(collectionName).update(userRecord);

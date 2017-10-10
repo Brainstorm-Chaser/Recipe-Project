@@ -9,16 +9,9 @@
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
   <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.16.4/math.min.js"></script>
   <style type="text/css">
 
-   body {
-    /*background-image: url(assets/images/cutting-board-hands.jpg);
-    height:100%;
-    background-position: center;
-    background-repeat:no-repeat;
-    background-size:cover;*/
-    /*background: rgba(255,255,255,1);*/
-  }
   header {
     background-image : url(assets/images/cooked-meal-1.jpg);
     height:250px;
@@ -99,13 +92,11 @@
         <div class="row" id="recipe-search">
           <div class="col-sm-6">
             
-            <div class="panel panel-default">
+            <div class="panel panel-default recipe-display-div">
               <div class="panel-heading">
-                <!-- <h3 class="panel-title" style="display: inline-block">Search</h3> -->
-
                 <div class="input-group">
-                  <h3 class="panel-title">Search</h3>
-                  <input type="text" class="form-control" id="search-input" placeholder="">
+                  <!-- <h3 class="panel-title">Search</h3> -->
+                  <input type="text" class="form-control" id="search-input" placeholder="Search Recipes">
                   <span class="input-group-btn">
                     <button class="btn btn-default" type="button" id="search">Go!</button>
                   </span>
@@ -113,12 +104,11 @@
               </div>
               <div class="panel-body" id="recipes-wrapper"></div>
             </div>
-            <!-- <div id="recipes-wrapper"></div> -->
           </div>
 
           <div class="col-sm-6">
             
-            <div class="panel panel-default">
+            <div class="panel panel-default recipe-display-div">
               <div class="panel-heading">
                 <div class="input-group">
                   <h3 class="panel-title">Selected Recipes</h3>
@@ -129,21 +119,72 @@
               </div>
               <div class="panel-body" id="selected-recipes-wrapper"></div>
             </div>
-
-            
-          <!-- <div id="selected-recipes-wrapper"></div> -->
           </div> 
         </div>
       </div>
     </div>
 
 
-    <div id="grocery-list-window">
-      <div id="grocery-list-wrapper"></div>
+    <div id="grocery-list-window" >
+      <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="input-group col-xs-4" id="grocery-list-header">
+          <input type="text" class="form-control" id="recipe-collection-name" placeholder="Recipe collection Name">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-default" id="save">Save</button>
+          </span>
+        </div>
+      </div>
+
+      <div class="panel-body">
+      
+        <div class="row">
+          <div class="col-sm-6">
+            <div id="grocery-selected-recipes"></div>
+          </div>
+        
+          <div class="col-sm-6">
+            <div id="grocery-list-wrapper"></div>
+          </div> 
+        </div>
+
+<!--         <div class="row">
+          <div class="col-sm-12">
+            <div id="test-div"></div>
+          </div>
+        </div> -->
+      </div>
+
+      </div>
     </div>
 
 
     <div id="map-window">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <iframe src="https://www.google.com/maps/embed/v1/search?key=AIzaSyBmDYecXmk6UpvFwFF7UvUIIeUoch3PCoQ&q=grocery+94109" height="500px" width="100%"></iframe>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="recipe-collection-window">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Saved Recipes</h3>
+        </div>
+        <div class="panel-body" id="recipe-collection">
+          <!-- <div class="row">
+            <div class="col-sm-6">
+              <div id="recipe-collection-recipes"></div>
+            </div>
+        
+            <div class="col-sm-6">
+              <div id="recipe-collection-grocery-list"></div>
+            </div> 
+          </div> -->
+        </div>
+      </div>
     </div>
 
   </div>

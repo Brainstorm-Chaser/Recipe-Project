@@ -1,5 +1,5 @@
 .main-wrapper{
-  width: 80vw;
+  width: 85vw;
 }
 
 .display-recipe{
@@ -17,19 +17,45 @@ input[type='checkbox']{
 
 }
 
-table {
+.panel-recipe{
+  background: #f5f5f5;
+  /*text-align: center;*/
+}
+
+
+/*.grocery-list table {
     border-collapse: collapse;
-    /*width: 100%;*/
     text-align: left;
     display: inline-table;
 }
 
-table, th, td {
+.grocery-list table, th, td {
     border: 1px solid lightgrey;
     padding: 10px;
+}*/
+
+.recipe-info table, td, th{
+  border: none;
+  padding: 5px 15px;
+  font-size: 1.1em;
+  
 }
 
-#recipe-window, #grocery-list-window, #map-window{
+.recipe-display-div{
+  /*min-height: 30vh;*/
+}
+
+.grocery-list table, td, th{
+  border: 1px solid lightgrey;
+  padding: 5px 15px;
+  /*font-size: 1.2em;*/ 
+}
+
+.grocery-list{
+  width: 100%;
+}
+
+#recipe-window, #grocery-list-window, #map-window, #recipe-collection-window{
   display: none;
 }
 
@@ -37,6 +63,16 @@ table, th, td {
   vertical-align: middle;
 }
 
-#recipe-window{
+#recipe-window, #grocery-list-window{
   margin-top: 10vh;
+}
+
+.servings{
+  text-align: right;
+  margin-left: 20px;
+  vertical-align: middle;
+}
+
+#grocery-list-header{
+  text-align: center;
 }
