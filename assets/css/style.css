@@ -62,12 +62,16 @@ input[type='checkbox']{
   width: 100%;
 }
 
-#recipe-window, #grocery-list-window, #map-window, #recipe-collection-window{
+#main-tab, #recipe-window, #grocery-list-window, #map-window, #recipe-collection-window{
   display: none;
 }
 
+#main-tab{
+  margin-top: 5vh;
+}
+
 #recipe-window, #grocery-list-window{
-  margin-top: 10vh;
+  /*margin-top: 5vh;*/
 }
 
 .servings{

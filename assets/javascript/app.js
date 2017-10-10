@@ -416,6 +416,7 @@ $(document).ready(function(){
     });
 
     $("#login-window").hide();
+    $("#main-tab").show();
     $("#recipe-window").show();
     $("#recipe-collection-window").show();
 
@@ -438,5 +439,12 @@ $(document).ready(function(){
     usersRef.child(userName).child(collectionName).update(userRecord);
 
   });
+
+  $('#main-tab a').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show');
+    console.log("here", $(this).tab());
+  })
+
 
 });
