@@ -6,6 +6,11 @@
     background-size:cover;
 }
 */
+
+body{
+  margin-bottom: 60px;
+}
+
 .main-wrapper{
   width: 85vw;
 }
@@ -30,15 +35,15 @@ input[type='checkbox']{
   /*text-align: center;*/
 }
 
-  #login {
-    background-color: darkgreen ;   /* Green #4CAF50; #799855*/
-    border: none;
-    color: white;
-    padding: 1vh 2vw;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 1.2em;
+#login {
+  background-color: darkgreen ;   /* Green #4CAF50; #799855*/
+  border: none;
+  color: white;
+  padding: 0.7vh 2vw;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.2em;
 }
 
 .recipe-info table, td, th{
@@ -60,10 +65,6 @@ input[type='checkbox']{
 
 #main-tab, #recipe-window, #grocery-list-window, #map-window, #recipe-collection-window{
   display: none;
-}
-
-#main-tab{
-  margin-top: 5vh;
 }
 
 #recipe-window, #grocery-list-window{
@@ -94,15 +95,15 @@ input[type='checkbox']{
 }
 
 .center-pills {
-   display: inline-block;
-   margin-top:25px;
-   background-color:white;
-   font-size: 20px;
-   padding:5px;
-   margin-left:10px;
-   margin-right:10px;
-   border-radius:10px;
-   border:2px solid green;
+ display: inline-block;
+ margin-top:25px;
+ background-color:white;
+ font-size: 20px;
+ padding:5px;
+ margin-left:10px;
+ margin-right:10px;
+ border-radius:10px;
+ border:2px solid green;
 }
 
 .header-text-box{
@@ -114,7 +115,7 @@ input[type='checkbox']{
   font-family: 'Sofia', cursive;
   font-size: 10vmin;
   text-shadow: 2px 2px 16px #000000;
-  }
+}
 
 .grocery-list-panel {
   margin-top:50px;
@@ -134,23 +135,31 @@ input[type='checkbox']{
   margin: 0 auto;
   width:35vw;
   text-align:center;
-  }
+}
 
 #recipe-window{
   width: 100%;
 }
 
 #logo-image{
-    width:100%;
-  }
+  width:100%;
+}
 
 #map-zip{
   width: 100%;
   height: 400px;
 }
 
+#main-tab{
+  margin-bottom: 10px;
+  margin-top: 5vh;
+}
+
 #main-tab li a{
-text-decoration: none;
+  text-decoration: none;
+  color: darkgreen;
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 .panel-heading .accordion-toggle:after {
@@ -161,4 +170,43 @@ text-decoration: none;
 }
 .panel-heading .accordion-toggle.collapsed:after {
   content: "\e080";
+}
+
+#inputValid {
+  font-weight: bold;
+}
+
+#error-msg-div{
+  margin-top: 10px;
+  display: none;
+}
+
+footer {
+  background-color: darkgreen;
+  color: white;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  height: 50px;
+}
+
+#footer-text{
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 15px;
+}
+
+.btn-panel{
+  background-color: darkgreen;
+  color: white;
+}
+
+.btn-panel:hover{
+  background-color: forestgreen;
+  color: white;
+}
+
+#login:hover{
+  background-color: forestgreen;
+  color: white;
 }

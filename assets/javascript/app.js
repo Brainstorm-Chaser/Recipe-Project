@@ -157,20 +157,11 @@ $(document).ready(function(){
               unitMatched = true;
               break;
             }
-            // else{
-            //   try{
-            //     console.log(ingredient.unit, ingredient.amount, quantity.unit);
-            //     console.log("********",math.to(math.unit(eval(ingredient.amount), ingredient.unit), quantity.unit));
-            //   }catch(err){
-            //     console.log("can't convert");
-            //   }
-            // }
           }
           if(!unitMatched){
             // there is item, but unit does not match with existing item
             groceryItem.quantities.push(new Quantity(ingredient.amount, ingredient.unit, 
               Array.from(ingredient.possibleUnits)));
-            console.log("-------------------",ingredient, groceryItem); 
           }
         }
       });
@@ -347,8 +338,6 @@ $(document).ready(function(){
 
   function displaySavedCollection(childSnapshot){
     var recipeCollectionName = childSnapshot.key;
-
-    console.log("collection name", recipeCollectionName);
       
     var recipeCollectionObj = childSnapshot.val();
     // var recipeZipcode = recipeCollectionObj.zipcode;
@@ -386,13 +375,28 @@ $(document).ready(function(){
   
 
   $("#login").on("click", function(){
+    event.preventDefault();
+    $("#error-msg-div").hide();
     userName = $("#nameInput").val().trim();
-    email = $("#emailInput").val().trim();
+    // email = $("#emailInput").val().trim();
     zipcode = $("#zipInput").val().trim();
 
-    if(userName !== ""){
-      // usersRef.child(userName).once('value', getUserRecipeCollection);
+    if(userName === ""){
+      showErrorMessage("Please enter a UserName!");
+      return 0;
+    }
 
+    if(zipcode === ""){
+      showErrorMessage("Please enter a ZipCode!");
+      return 0;
+    }
+
+    if (isNaN(zipcode) || zipcode < 10000) {
+      showErrorMessage("Invalid ZipCode Entry!");
+      return 0;
+    }
+
+    if(userName !== ""){
       usersRef.child(userName).on('child_added', displaySavedCollection);
 
       $("#login-window").hide();
@@ -401,6 +405,11 @@ $(document).ready(function(){
       $("#recipe-collection-window").show();
     }
   });
+
+  function showErrorMessage(message){
+    $("#error-msg-div").show();
+    $("#error-message").html(message);
+  }
 
   $("#save").on("click", function(){
     var collectionName = $("#recipe-collection-name").val().trim();
@@ -434,7 +443,6 @@ $(document).ready(function(){
   $('#main-tab a').click(function (e) {
     e.preventDefault()
     $(this).tab('show');
-    console.log("here", $(this).tab());
   })
 
 });
