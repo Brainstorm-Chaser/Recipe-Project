@@ -201,3 +201,15 @@ footer {
   color: white;
 }
 
+.btn-panel:focus {
+  background-color: forestgreen;
+  color: white;
+  box-shadow: none;
+}
+
+#login:focus{
+  background-color: forestgreen;
+  color: white;
+  box-shadow: none;
+}
+

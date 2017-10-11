@@ -420,8 +420,8 @@ $(document).ready(function(){
         groceryTable: groceryListTable[0].outerHTML 
       }
       usersRef.child(userName).child(collectionName).update(userRecord);
+      setTimeout(reset, 1000); 
     }
-    setTimeout(reset, 1000); 
   });
 
   function reset(){
