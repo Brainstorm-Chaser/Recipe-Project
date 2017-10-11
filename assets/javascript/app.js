@@ -80,19 +80,22 @@ $(document).ready(function(){
       recipeIds += id + ",";
     });
 
-    recipeIds = recipeIds.slice(0, recipeIds.length-1);
+    if(recipeIds !== ""){
+      recipeIds = recipeIds.slice(0, recipeIds.length-1);
 
-    $.ajax({
-      type: "GET",
-      url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk",
-      dataType: "json",
-      data: jQuery.param({ids: recipeIds, includeNutrition: false}),
-      headers: {
-        'X-Mashape-Key': 'LvriMxRsKAmshM4K2IHnxi8ZrwOUp1mrqSCjsnsOdiLEfjwK75'
-      }
-    }).done(function(response) {
-      getIngredients(response);
-    });
+      $.ajax({
+        type: "GET",
+        url: "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/informationBulk",
+        dataType: "json",
+        data: jQuery.param({ids: recipeIds, includeNutrition: false}),
+        headers: {
+          'X-Mashape-Key': 'LvriMxRsKAmshM4K2IHnxi8ZrwOUp1mrqSCjsnsOdiLEfjwK75'
+        }
+      }).done(function(response) {
+        getIngredients(response);
+      });
+    }
+
   });
 
 
@@ -342,51 +345,45 @@ $(document).ready(function(){
     }
   });
 
-  function getUserRecipeCollection(snapshot){
-    snapshot.forEach(function(childSnapshot) {
-      var recipeCollectionName = childSnapshot.key;
+  function displaySavedCollection(childSnapshot){
+    var recipeCollectionName = childSnapshot.key;
+
+    console.log("collection name", recipeCollectionName);
       
-      var recipeCollectionObj = childSnapshot.val();
-      var recipeZipcode = recipeCollectionObj.zipcode;
-      var recipeEmail = recipeCollectionObj.email;
-      var recipesSaved = JSON.parse(recipeCollectionObj.recipes);
-      var recipeGroceryTable = recipeCollectionObj.groceryTable;
+    var recipeCollectionObj = childSnapshot.val();
+    // var recipeZipcode = recipeCollectionObj.zipcode;
+    // var recipeEmail = recipeCollectionObj.email;
+    var recipesSaved = JSON.parse(recipeCollectionObj.recipes);
+    var recipeGroceryTable = recipeCollectionObj.groceryTable;
 
-      var panelId = recipeCollectionName.replace(/\s/g, '') + "_data";
+    var panelId = recipeCollectionName.replace(/\s/g, '') + "_data";
 
-      var collectionPanel = $("<div>").addClass("panel panel-default panel-recipe");
-      var collectionHeader = $("<div>").addClass("panel-heading");
-      var collectionBody = $("<div>").addClass("panel-body collapse in").attr("id", panelId);
+    var collectionPanel = $("<div>").addClass("panel panel-default panel-recipe");
+    var collectionHeader = $("<div>").addClass("panel-heading");
+    var collectionBody = $("<div>").addClass("panel-body collapse in").attr("id", panelId);
 
-      var row = $("<div>").addClass("row");
-      var col_1 = $("<div>").addClass("col-md-6");
-      var col_2 = $("<div>").addClass("col-md-6");
-      row.append(col_1, col_2);
-      collectionBody.append(row);
+    var row = $("<div>").addClass("row");
+    var col_1 = $("<div>").addClass("col-md-12 col-lg-6");
+    var col_2 = $("<div>").addClass("col-md-12 col-lg-6");
+    row.append(col_1, col_2);
+    collectionBody.append(row);
 
-      var collectionName = $("<h3>").addClass("panel-title").text(recipeCollectionName).addClass("display-recipe");
-      var a = $("<a>").append(collectionName).
-        attr({"data-toggle": "collapse", "data-target": "#"+panelId}).addClass("accordion-toggle");
-      collectionHeader.append(a);
+    var collectionName = $("<h3>").addClass("panel-title").text(recipeCollectionName).addClass("display-recipe");
+    var a = $("<a>").append(collectionName).
+      attr({"data-toggle": "collapse", "data-target": "#"+panelId}).addClass("accordion-toggle");
+    collectionHeader.append(a);
 
-      // var collectionName = $("<h3>").addClass("panel-title");
-      // var a = $("<a>").attr({"data-toggle": "collapse", "href": "#"+panelId}).
-      //   addClass("accordion-toggle").text(recipeCollectionName);
-      // collectionName.append(a);
-      // collectionHeader.append(collectionName);
-
-
-      Object.values(recipesSaved).forEach(function(recipe){
-        var recipePanel = createRecipePanel(recipe, false);
-        col_1.append(recipePanel);
-      });
-
-      col_2.html(recipeGroceryTable);
-      collectionPanel.append(collectionHeader, collectionBody);
-
-      $("#recipe-collection").append(collectionPanel);
+    Object.values(recipesSaved).forEach(function(recipe){
+      var recipePanel = createRecipePanel(recipe, false);
+      col_1.append(recipePanel);
     });
+
+    col_2.html(recipeGroceryTable);
+    collectionPanel.append(collectionHeader, collectionBody);
+
+    $("#recipe-collection").append(collectionPanel);
   }
+  
 
   $("#login").on("click", function(){
     userName = $("#nameInput").val().trim();
@@ -394,7 +391,9 @@ $(document).ready(function(){
     zipcode = $("#zipInput").val().trim();
 
     if(userName !== ""){
-      usersRef.child(userName).once('value', getUserRecipeCollection);
+      // usersRef.child(userName).once('value', getUserRecipeCollection);
+
+      usersRef.child(userName).on('child_added', displaySavedCollection);
 
       $("#login-window").hide();
       $("#main-tab").show();
@@ -408,8 +407,6 @@ $(document).ready(function(){
   
     if(collectionName !== ""){
       var userRecord = {
-        zipcode: zipcode,
-        email: email,
         recipes: JSON.stringify(selectedRecipesMap),
         groceryTable: groceryListTable[0].outerHTML 
       }
