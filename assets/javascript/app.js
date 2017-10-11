@@ -70,9 +70,6 @@ $(document).ready(function(){
         displayRecipes(response);
       });
     }
-
-    // displayRecipes(searchResponse);
-
   });
 
   $("#generateGroceryList").on("click", function(){
@@ -94,24 +91,18 @@ $(document).ready(function(){
     }).done(function(response) {
       getIngredients(response);
     });
-
-    // var response = JSON.parse(recipesFullInfo);
-    // getIngredients(response);
   });
 
 
   function getIngredients(response){
     response.forEach(function(recipe){
-
       var recipeObj = recipe;
-      
       var recipeId = recipeObj.id;
       var servings = recipeObj.servings;
 
       var ingredientsArray = [];
 
       recipeObj.extendedIngredients.forEach(function(ingredient){
-        // generateGroceryList(ingredient);
         var possibleUnits = [ingredient.unit, ingredient.unitLong, ingredient.unitShort];
         ingredientsArray.push(new Ingredient(ingredient.name, ingredient.amount, ingredient.unitLong, 
           ingredient.aisle, possibleUnits));
@@ -123,11 +114,8 @@ $(document).ready(function(){
     });
 
     var groceryList = generateGroceryList(selectedRecipesMap);
-    // displayGroceryList(selectedRecipesMap);
     displayGroceryList(groceryList);
     displayMap();
-
-    // testGroceryList();
   }
 
   function displayMap(){
@@ -150,23 +138,17 @@ $(document).ready(function(){
         }
         else{
           var groceryItem = groceryList[ingredientName];
-          console.log("item exists: ", groceryItem);
-
-          // var conUnits = [];
 
           for(var index=0; index<groceryItem.quantities.length; index++){
-            var quantity = groceryItem.quantities[index];
-            
+            var quantity = groceryItem.quantities[index]; 
             var common = $.grep(quantity.possibleUnits, function(element) {
               return $.inArray(element, ingredient.possibleUnits ) !== -1;
             });
 
             var unitMatched = false;
             if(common.length !== 0){
-              console.log("common", common);
               var totalAmount = eval(quantity.amount) + eval(ingredient.amount);
               groceryItem.quantities[index].amount = totalAmount;
-              // console.log("unit matched", groceryItem, quantity);
               unitMatched = true;
               break;
             }
@@ -192,7 +174,6 @@ $(document).ready(function(){
   }
 
   function displayGroceryList(groceryList){
-
     $("#grocery-list-wrapper").empty();
     
     var groceryItems = Object.values(groceryList);
@@ -201,7 +182,6 @@ $(document).ready(function(){
       var nameB = b.aisle;
       return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
     });
-    console.log(groceryItems);
 
     var table = $("<table>").addClass("grocery-list");
     var tHead = $("<thead>");
@@ -214,7 +194,6 @@ $(document).ready(function(){
     rowHeader.append($("<th>").text('Amount'));
     rowHeader.append($("<th>").text('Unit'));
     rowHeader.append($("<th>").text('Aisle'));
-    // rowHeader.append($("<th>").text('Price'));
     tHead.append(rowHeader);
 
     groceryItems.forEach(function(ingredient){
@@ -240,18 +219,23 @@ $(document).ready(function(){
     groceryListTable = table;
 
     $("#grocery-list-wrapper").html(table);
+    
+    showSelectedRecipes();
 
+    $("#recipe-window").hide();
+    $("#grocery-list-window").show();    
+  }
+
+  function showSelectedRecipes(){
+    // hiding the check boxes
     $("#grocery-selected-recipes").append($("#selected-recipes-wrapper").html());
     $("input:checkbox").hide();
 
+    // showing the serving size
     Object.values(selectedRecipesMap).forEach(function(recipe){
       var span = $("<span>").text("Servings: " + recipe.servings).addClass("servings");
       $("#selected-" + recipe.id + "> .panel-heading").append(span);
     });
-
-    $("#recipe-window").hide();
-
-    $("#grocery-list-window").show();    
   }
 
   function displayRecipes(searchResponse){
@@ -263,8 +247,6 @@ $(document).ready(function(){
       var recipePanel = createRecipePanel(recipe, true);
       $("#recipes-wrapper").append(recipePanel);
     });
-
-    console.log("searchResultRecipesMap", searchResultRecipesMap);
   }
 
   function createRecipePanel(recipe, showCheckBox){
@@ -292,9 +274,7 @@ $(document).ready(function(){
     var recipeImgLink = $("<a>").attr("href", link).attr('target','_blank').append(recipeImg);
     var recipeLinkWrapper = $("<div>").append(recipeImgLink).addClass("display-recipe");
     
-    var recipeInfoTable = info;  //getRecipeInfoTable(dataPoints);
-    // var tableWrapper = $("<div>").append(recipeInfoTable).addClass("display-recipe");
-    console.log("info", info);
+    var recipeInfoTable = info;
     var tableWrapper = $("<div>").addClass("display-recipe").html(info);  
 
     recipeBody.append(recipeLinkWrapper);
@@ -305,7 +285,6 @@ $(document).ready(function(){
 
     return recipePanel;
   }
-
 
   function getRecipeId(link){
     var idStartIndex = link.lastIndexOf("-") + 1;
@@ -361,83 +340,70 @@ $(document).ready(function(){
     }
   });
 
-  $("#login").on("click", function(){
-    userName = $("#nameInput").val();
-    email = $("#emailInput").val();
-    zipcode = $("#zipInput").val();
+  function getUserRecipeCollection(snapshot){
+    snapshot.forEach(function(childSnapshot) {
+      var recipeCollectionName = childSnapshot.key;
+      
+      var recipeCollectionObj = childSnapshot.val();
+      var recipeZipcode = recipeCollectionObj.zipcode;
+      var recipeEmail = recipeCollectionObj.email;
+      var recipesSaved = JSON.parse(recipeCollectionObj.recipes);
+      var recipeGroceryTable = recipeCollectionObj.groceryTable;
 
-    usersRef.child(userName).once('value', function(snapshot){
-      console.log("-------on value called--------");
-      console.log("snapShot", snapshot.val());
+      var panelId = recipeCollectionName + "_data";
+      var collectionPanel = $("<div>").addClass("panel panel-default panel-recipe");
+      var collectionHeader = $("<div>").addClass("panel-heading");
+      var collectionBody = $("<div>").addClass("panel-body collapse in").attr("id", panelId);
 
-      // var query = firebase.database().ref("users").orderByKey();
-      // query.once("value").then(function(snapshot) {
-      snapshot.forEach(function(childSnapshot) {
-        var recipeCollectionName = childSnapshot.key;
-        console.log("recipe name",recipeCollectionName);
-        
-        var recipeCollectionObj = childSnapshot.val();
-        var recipeZipcode = recipeCollectionObj.zipcode;
-        var recipeEmail = recipeCollectionObj.email;
-        var recipesSaved = JSON.parse(recipeCollectionObj.recipes);
-        var recipeGroceryTable = recipeCollectionObj.groceryTable;
+      var row = $("<div>").addClass("row");
+      var col_1 = $("<div>").addClass("col-md-6");
+      var col_2 = $("<div>").addClass("col-md-6");
+      row.append(col_1, col_2);
+      collectionBody.append(row);
 
-        console.log(recipeZipcode, recipeEmail, recipesSaved, recipeGroceryTable);
+      var collectionName = $("<h3>").addClass("panel-title").text(recipeCollectionName).addClass("display-recipe");
+      var a = $("<a>").append(collectionName).attr({"data-toggle": "collapse", "data-target": "#"+panelId});
+      collectionHeader.append(a);
 
-        var panelId = recipeCollectionName + "_data";
-        var collectionPanel = $("<div>").addClass("panel panel-default panel-recipe");
-        var collectionHeader = $("<div>").addClass("panel-heading");
-        var collectionBody = $("<div>").addClass("panel-body");
-
-        var row = $("<div>").addClass("row  collapse in").attr("id", panelId);
-        var col_1 = $("<div>").addClass("col-md-6");
-        var col_2 = $("<div>").addClass("col-md-6");
-        row.append(col_1, col_2);
-        collectionBody.append(row);
-
-        var collectionName = $("<h3>").addClass("panel-title").text("Name: " + recipeCollectionName).addClass("display-recipe");
-        var a = $("<a>").addClass("form-control").append(collectionName).attr({"data-toggle": "collapse", "data-target": "#"+panelId});
-        collectionHeader.append(a);
-
-        console.log("values", Object.values(recipesSaved));
-        Object.values(recipesSaved).forEach(function(recipe){
-          console.log(".......", recipe);
-          var recipePanel = createRecipePanel(recipe, false);
-          col_1.append(recipePanel);
-        });
-
-        col_2.html(recipeGroceryTable);
-
-        collectionPanel.append(collectionHeader, collectionBody);
-
-        $("#recipe-collection").append(collectionPanel);
-
+      Object.values(recipesSaved).forEach(function(recipe){
+        var recipePanel = createRecipePanel(recipe, false);
+        col_1.append(recipePanel);
       });
+
+      col_2.html(recipeGroceryTable);
+      collectionPanel.append(collectionHeader, collectionBody);
+
+      $("#recipe-collection").append(collectionPanel);
     });
+  }
 
-    $("#login-window").hide();
-    $("#main-tab").show();
-    $("#recipe-window").show();
-    $("#recipe-collection-window").show();
+  $("#login").on("click", function(){
+    userName = $("#nameInput").val().trim();
+    email = $("#emailInput").val().trim();
+    zipcode = $("#zipInput").val().trim();
 
+    if(userName !== ""){
+      usersRef.child(userName).once('value', getUserRecipeCollection);
+
+      $("#login-window").hide();
+      $("#main-tab").show();
+      $("#recipe-window").show();
+      $("#recipe-collection-window").show();
+    }
   });
 
   $("#save").on("click", function(){
-
-  var collectionName = $("#recipe-collection-name").val();
-  console.log(userName, email, zipcode, collectionName);
-
-  console.log("groceryListTable",groceryListTable[0].outerHTML);
-
-    var userRecord = {
-      zipcode: zipcode,
-      email: email,
-      recipes: JSON.stringify(selectedRecipesMap),
-      groceryTable: groceryListTable[0].outerHTML 
+    var collectionName = $("#recipe-collection-name").val().trim();
+  
+    if(collectionName !== ""){
+      var userRecord = {
+        zipcode: zipcode,
+        email: email,
+        recipes: JSON.stringify(selectedRecipesMap),
+        groceryTable: groceryListTable[0].outerHTML 
+      }
+      usersRef.child(userName).child(collectionName).update(userRecord);
     }
-
-    usersRef.child(userName).child(collectionName).update(userRecord);
-
   });
 
   $('#main-tab a').click(function (e) {
@@ -445,6 +411,5 @@ $(document).ready(function(){
     $(this).tab('show');
     console.log("here", $(this).tab());
   })
-
 
 });

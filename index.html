@@ -14,182 +14,147 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   
   <style type="text/css"> 
-  header {
-    background-image : url(assets/images/cooked-meal-1.jpg);
-    height:250px;
-    background-position: center;
-    background-repeat:no-repeat;
-    background-size:cover;
-  }
-</style>
+    header {
+      background-image : url(assets/images/cooked-meal-1.jpg);
+      height:250px;
+      background-position: center;
+      background-repeat:no-repeat;
+      background-size:cover;
+    }
+  </style>
 </head>
 
 <!-- Body Begins Here -->
 <body >
-   <header id="#page-header">
-            <div class="container header inner">
-            <nav class="navbar">
-            <div class="container">
-              <div class = "header-text-box"
-            <h1>Culinary Checklist</h1>
-              </div>
-        </div>
+ <header id="#page-header">
+  <div class="container header inner">
+    <nav class="navbar">
+      <div class="container">
+        <div class = "header-text-box"
+        <h1>Culinary Checklist</h1>
       </div>
-      </nav>
+    </div>
   </div>
+</nav>
+</div>
 </header>
 
-  <div class="container main-wrapper">
+<div class="container main-wrapper">
 
-    <div id="login-window">
-        <!-- <div>
-          <h1 class="display-3"></h1>
-          <img id= "logo-image" src = "assets/images/culinary-checklist-logo.jpg"></img>
-        </div> -->
-  
-        <div class="form-group">
-          <label for="nameInput"></label>
-          <input type="text" class="form-control" id="nameInput" placeholder="Name (i.e. John Smith)">
+  <div id="login-window">  
+    <div class="form-group">
+      <label for="nameInput"></label>
+      <input type="text" class="form-control" id="nameInput" placeholder="Name (i.e. John Smith)">
 
-          <label for="emailInput"></label>
-          <input type="email" class="form-control" id="emailInput" placeholder="Email (i.e. johnsmith@gmail.com)">
+      <label for="emailInput"></label>
+      <input type="email" class="form-control" id="emailInput" placeholder="Email (i.e. johnsmith@gmail.com)">
 
-          <label for="zipInput"></label>
-          <input type="text" class="form-control" id="zipInput" placeholder="Zip Code (i.e. 90210)">
-        </div>
-
-        <button type="submit" class="btn btn-default" id="login">Login</button>
+      <label for="zipInput"></label>
+      <input type="text" class="form-control" id="zipInput" placeholder="Zip Code (i.e. 90210)">
     </div>
 
+    <button type="submit" class="btn btn-default" id="login">Login</button>
+  </div>
 
-    <div>
 
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist" id="main-tab">
-    <li role="presentation" class="active"><a href="#search-recipes" aria-controls="search-recipes" role="tab" data-toggle="tab">Search For Recipes</a></li>
-    <li role="presentation"><a href="#saved-recipes" aria-controls="saved-recipes" role="tab" data-toggle="tab">Saved Recipes</a></li>
-  </ul>
+  <div>
 
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="search-recipes">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist" id="main-tab">
+      <li role="presentation" class="active"><a href="#search-recipes" aria-controls="search-recipes" role="tab" data-toggle="tab">Search For Recipes</a></li>
+      <li role="presentation"><a href="#saved-recipes" aria-controls="saved-recipes" role="tab" data-toggle="tab">Saved Recipes</a></li>
+    </ul>
 
-      <div id="recipe-window">
-        <div class="row">
-          <div class="row" id="recipe-search">
-            <div class="col-sm-6">
-              
-              <div class="panel panel-default recipe-display-div">
-                <div class="panel-heading">
-                  <div class="input-group">
-                    <!-- <h3 class="panel-title">Search</h3> -->
-                    <input type="text" class="form-control" id="search-input" placeholder="Search Recipes">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="button" id="search">Go!</button>
-                    </span>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="search-recipes">
+
+        <div id="recipe-window">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="row" id="recipe-search">
+
+                <div class="col-sm-6">
+                  <div class="panel panel-default recipe-display-div">
+                    <div class="panel-heading">
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="search-input" placeholder="Search Recipes">
+                        <span class="input-group-btn">
+                          <button class="btn btn-default" type="button" id="search">Go!</button>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="panel-body" id="recipes-wrapper"></div>
                   </div>
                 </div>
-                <div class="panel-body" id="recipes-wrapper"></div>
-              </div>
-            </div>
 
-            <div class="col-sm-6">
-              
-              <div class="panel panel-default recipe-display-div">
-                <div class="panel-heading">
-                  <div class="input-group">
-                    <h3 class="panel-title">Selected Recipes</h3>
-                    <span class="input-group-btn">
-                      <button type="submit" class="btn btn-default" id="generateGroceryList">Generate Grocery List</button>
-                    </span>
+                <div class="col-sm-6">
+                  <div class="panel panel-default recipe-display-div">
+                    <div class="panel-heading">
+                      <div class="input-group">
+                        <h3 class="panel-title">Selected Recipes</h3>
+                        <span class="input-group-btn">
+                          <button type="submit" class="btn btn-default" id="generateGroceryList">Generate Grocery List</button>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="panel-body" id="selected-recipes-wrapper"></div>
                   </div>
                 </div>
-                <div class="panel-body" id="selected-recipes-wrapper"></div>
-              </div>
-            </div> 
-          </div>
-        </div>
-      </div>
 
-      <div id="grocery-list-window" >
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <div class="input-group col-xs-4" id="grocery-list-header">
-              <input type="text" class="form-control" id="recipe-collection-name" placeholder="Recipe collection Name">
-              <span class="input-group-btn">
-                <button type="submit" class="btn btn-default" id="save">Save</button>
-              </span>
-            </div>
-          </div>
-
-          <div class="panel-body">
-            <div class="row">
-              <div class="col-sm-6">
-                <div id="grocery-selected-recipes"></div>
               </div>
-            
-              <div class="col-sm-6">
-                <div id="grocery-list-wrapper"></div>
-              </div> 
             </div>
           </div>
         </div>
-      </div>
 
-      <div id="map-window">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <iframe src="" id="map-zip"></iframe>
+        <div id="grocery-list-window" >
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="input-group col-xs-4" id="grocery-list-header">
+                <input type="text" class="form-control" id="recipe-collection-name" placeholder="Recipe collection Name">
+                <span class="input-group-btn">
+                  <button type="submit" class="btn btn-default" id="save">Save</button>
+                </span>
+              </div>
+            </div>
+
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div id="grocery-selected-recipes"></div>
+                </div>
+
+                <div class="col-sm-6">
+                  <div id="grocery-list-wrapper"></div>
+                </div> 
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-    </div>
-
-    <div role="tabpanel" class="tab-pane" id="saved-recipes">
-      
-      <div id="recipe-collection-window">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Saved Recipes</h3>
+        <div id="map-window">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <iframe src="" id="map-zip"></iframe>
+            </div>
           </div>
-          <div class="panel-body" id="recipe-collection"></div>
         </div>
+
       </div>
 
+      <div role="tabpanel" class="tab-pane" id="saved-recipes">
+        <div id="recipe-collection-window">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Recipe Collections</h3>
+            </div>
+            <div class="panel-body" id="recipe-collection"></div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
-</div>
-
-    <!-- <div class="col-md-12 text-center">
-
-      <ul class="nav nav-pills center-pills">
-          <li>  
-            <a href="#first">Search Recipes</a>
-          </li>
-      </ul>
-      <ul class="nav nav-pills center-pills">
-          <li>
-            <a href="#second">Saved Recipes</a>
-          </li>
-      </ul>
-    </div>
-
-    <div id="first" style="width: 100vh; height: 100vw; background-color: green">
-      
-    </div>
-
-    <div id="second" style="width: 100vh; height: 100vw; background-color: blue">
-      
-    </div> -->
-
-    
-
-
-
-
-
-    
 
   </div>
 

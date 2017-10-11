@@ -48,10 +48,6 @@ input[type='checkbox']{
   
 }
 
-.recipe-display-div{
-  /*min-height: 30vh;*/
-}
-
 .grocery-list table, td, th{
   border: 1px solid lightgrey;
   padding: 5px 15px;
@@ -141,8 +137,8 @@ input[type='checkbox']{
   }
 
 #recipe-window{
-  margin-top: 10vh;
-  }
+  width: 100%;
+}
 
 #logo-image{
     width:100%;
@@ -151,4 +147,8 @@ input[type='checkbox']{
 #map-zip{
   width: 100%;
   height: 400px;
+}
+
+#main-tab li a{
+text-decoration: none;
 }
