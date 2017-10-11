@@ -73,6 +73,8 @@ $(document).ready(function(){
   });
 
   $("#generateGroceryList").on("click", function(){
+    $("#search-input").val('');
+
     var recipeIds = "";
     Object.keys(selectedRecipesMap).forEach(function(id){
       recipeIds += id + ",";
@@ -350,7 +352,8 @@ $(document).ready(function(){
       var recipesSaved = JSON.parse(recipeCollectionObj.recipes);
       var recipeGroceryTable = recipeCollectionObj.groceryTable;
 
-      var panelId = recipeCollectionName + "_data";
+      var panelId = recipeCollectionName.replace(/\s/g, '') + "_data";
+
       var collectionPanel = $("<div>").addClass("panel panel-default panel-recipe");
       var collectionHeader = $("<div>").addClass("panel-heading");
       var collectionBody = $("<div>").addClass("panel-body collapse in").attr("id", panelId);
@@ -365,6 +368,13 @@ $(document).ready(function(){
       var a = $("<a>").append(collectionName).
         attr({"data-toggle": "collapse", "data-target": "#"+panelId}).addClass("accordion-toggle");
       collectionHeader.append(a);
+
+      // var collectionName = $("<h3>").addClass("panel-title");
+      // var a = $("<a>").attr({"data-toggle": "collapse", "href": "#"+panelId}).
+      //   addClass("accordion-toggle").text(recipeCollectionName);
+      // collectionName.append(a);
+      // collectionHeader.append(collectionName);
+
 
       Object.values(recipesSaved).forEach(function(recipe){
         var recipePanel = createRecipePanel(recipe, false);
@@ -405,7 +415,24 @@ $(document).ready(function(){
       }
       usersRef.child(userName).child(collectionName).update(userRecord);
     }
+    setTimeout(reset, 1000); 
   });
+
+  function reset(){
+    searchResultRecipesMap = {};
+    selectedRecipesMap = {};
+
+    $("#recipe-collection-name").val('');
+
+    $("#grocery-selected-recipes").empty();
+    $("#grocery-list-wrapper").empty();
+    $("#recipes-wrapper").empty();
+    $("#selected-recipes-wrapper").empty();
+
+    $("#grocery-list-window").hide();
+    $("#recipe-window").show();
+    $("#map-window").hide();
+  }
 
   $('#main-tab a').click(function (e) {
     e.preventDefault()
