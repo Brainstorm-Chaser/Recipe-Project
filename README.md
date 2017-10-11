@@ -1,7 +1,5 @@
 ## Title: The Culinary Checklist
 
-## File
-
 ## Objective/Purpose
 * The purpose of our web application (The Culinary Checklist) is to search for recipes based on the user's dish of choice, gather the recipe ingridient information for that dish, save that user recipe information, and lastly, search on Google Maps to discover grocery stores within the user's inputted zip code.
 
