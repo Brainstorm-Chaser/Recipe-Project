@@ -12,11 +12,10 @@
 
 ## Prerequisites
 * Web Browser (Google Chrome preferred)
-*
 
 ## Technologies Used
 * AJAX: Accessed the mashape spoonacular API
 * APIs: mashape spoonacular and google maps
 * Bootstrap: panels, containers
 * jQuery: appending info to divs, re-writing divs, event listeners like on-click, ajax
-* New Technology: [discuss as a group]
+* New Technology: collapseJS
