@@ -152,3 +152,13 @@ input[type='checkbox']{
 #main-tab li a{
 text-decoration: none;
 }
+
+.panel-heading .accordion-toggle:after {
+  font-family: 'Glyphicons Halflings';
+  content: "\e114";
+  float: right;
+  color: grey;
+}
+.panel-heading .accordion-toggle.collapsed:after {
+  content: "\e080";
+}

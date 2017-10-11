@@ -362,7 +362,8 @@ $(document).ready(function(){
       collectionBody.append(row);
 
       var collectionName = $("<h3>").addClass("panel-title").text(recipeCollectionName).addClass("display-recipe");
-      var a = $("<a>").append(collectionName).attr({"data-toggle": "collapse", "data-target": "#"+panelId});
+      var a = $("<a>").append(collectionName).
+        attr({"data-toggle": "collapse", "data-target": "#"+panelId}).addClass("accordion-toggle");
       collectionHeader.append(a);
 
       Object.values(recipesSaved).forEach(function(recipe){
