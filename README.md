@@ -19,3 +19,8 @@
 * Bootstrap: panels, containers
 * jQuery: appending info to divs, re-writing divs, event listeners like on-click, ajax
 * New Technology: collapseJS
+
+## GIF
+![Alt Text](https://github.com/Brainstorm-Chaser/The-Culinary-Checklist/blob/master/giphy.gif)
+* NOTE: Clicking pictures redirects to external site (Spoonacular). Did not include in gif because it's a different website.
+
